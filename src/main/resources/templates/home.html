@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Wawa</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/css/uikit.min.css" />
+
+    <!-- UIkit JS -->
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/js/uikit-icons.min.js"></script>
+</head>
+<body>
+<div class="uk-container">
+    <h1 class="uk-heading-small">Wawa</h1>
+    <div class="uk-margin uk-card uk-card-default uk-card-body">
+        <div class="uk-margin">
+            <a class="uk-button uk-button-default" href="refresh">Refresh</a>
+        </div>
+        <div class="uk-margin">
+            <table>
+                <tr th:each="b:${blogs}">
+                    <td>
+                        <img width="50" height="70" th:src="@{${website+b.image}}" alt="Avatar">
+                    </td>
+                    <td>
+                        <a th:href="@{${website+b.url}}" th:text="${b.title}"></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

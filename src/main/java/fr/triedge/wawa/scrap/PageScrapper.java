@@ -1,6 +1,8 @@
 package fr.triedge.wawa.scrap;
 
+import fr.triedge.wawa.model.Category;
 import fr.triedge.wawa.model.Entry;
+import fr.triedge.wawa.utils.Vars;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,10 +14,12 @@ import java.util.Iterator;
 
 public class PageScrapper {
 
-    public final String URL_COMPLETE                = "?p=films&s=blu-ray_1080p-720p";
+    public final String URL_FILMS                   = "?p=films";
+    public final String URL_MANGAS                  = "?p=mangas";
     public final String URL_PAGE                    = "&page=";
 
-    public ArrayList<Entry> parse(String url) throws IOException {
+    public ArrayList<Entry> parse(String url, Category cat) throws IOException {
+        System.out.println("Reading "+url);
         String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.82";
         Document doc = Jsoup.connect(url).userAgent(userAgent).sslSocketFactory(SSLHelper.socketFactory()).get();
         ArrayList<Entry> entries = new ArrayList<>();
@@ -34,7 +38,13 @@ public class PageScrapper {
             ent.setUrl(u);
 
             // ID
-            String idlink = u.replace("?p=film&id=","").split("-")[0];
+            String idlink = "0";
+            if (cat == Category.MANGA){
+                idlink = u.replace("?p=manga&id=","").split("-")[0];
+            }else{
+                idlink = u.replace("?p=film&id=","").split("-")[0];
+
+            }
             ent.setId(Integer.parseInt(idlink));
 
             // Image
@@ -46,13 +56,31 @@ public class PageScrapper {
         return entries;
     }
 
-    public ArrayList<Entry> scrapWebsite(String url, int pages) throws IOException {
+    public ArrayList<Entry> scrapWebsite(int pages) throws IOException {
         ArrayList<Entry> entries = new ArrayList<>();
-        String fullUrl = url+=URL_COMPLETE;
-        entries.addAll(parse(fullUrl));
+
+        // FILMS
+        entries.addAll(parseCategory(Category.FILMS, pages));
+        System.out.println("Finished blueray");
+
+        // MANGA
+        entries.addAll(parseCategory(Category.MANGA, pages));
+        System.out.println("Finished manga");
+
+        return entries;
+    }
+
+    private ArrayList<Entry> parseCategory(Category cat, int pages) throws IOException {
+        ArrayList<Entry> entries = new ArrayList<>();
+        String fullurl = null;
+        switch (cat){
+            case FILMS: fullurl = Vars.WEBSITE+ URL_FILMS;break;
+            case MANGA: fullurl = Vars.WEBSITE+URL_MANGAS;break;
+        }
+        entries.addAll(parse(fullurl, cat));
         if (pages > 1){
             for (int p = 2;p<=pages;++p){
-                entries.addAll(parse(fullUrl + URL_PAGE + p));
+                entries.addAll(parse(fullurl + URL_PAGE + p, cat));
             }
         }
         return entries;
