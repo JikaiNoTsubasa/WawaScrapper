@@ -2,13 +2,14 @@ package fr.triedge.wawa;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Properties;
 
 @SpringBootApplication
 @EnableScheduling
-public class RunScrapper {
+public class RunScrapper extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         System.setProperty("https.protocols","TLSv1.2");

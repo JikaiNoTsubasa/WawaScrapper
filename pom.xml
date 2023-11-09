@@ -13,7 +13,7 @@
 
     <groupId>fr.triedge.wawa</groupId>
     <artifactId>WawaScrapper</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -76,5 +76,8 @@
 
     </dependencies>
 
+    <build>
+        <finalName>Wawa</finalName>
+    </build>
 
 </project>

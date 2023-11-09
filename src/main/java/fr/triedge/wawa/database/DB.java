@@ -80,6 +80,7 @@ public class DB {
         while (res.next()){
             entries.add(createEntry(res));
         }
+        res.close();
         stmt.close();
         return entries;
     }
@@ -91,5 +92,21 @@ public class DB {
         ent.setUrl(res.getString("entry_url"));
         ent.setImage(res.getString("entry_img"));
         return ent;
+    }
+
+    public ArrayList<Entry> search(String word) throws SQLException {
+        if (word == null || word.length() == 0)
+            return null;
+        ArrayList<Entry> entries = new ArrayList<>();
+        String sql = "select * from wawa_entry  where lower(entry_title) like ? order by entry_id";
+        PreparedStatement stmt = getConnection().prepareStatement(sql);
+        stmt.setString(1,"%"+word.toLowerCase()+"%");
+        ResultSet res = stmt.executeQuery();
+        while (res.next()){
+            entries.add(createEntry(res));
+        }
+        res.close();
+        stmt.close();
+        return entries;
     }
 }

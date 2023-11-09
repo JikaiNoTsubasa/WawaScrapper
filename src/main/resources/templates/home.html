@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <title>Wawa</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/css/uikit.min.css" />
-
-    <!-- UIkit JS -->
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/js/uikit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/js/uikit-icons.min.js"></script>
+    <th:block th:include="fragments::meta"></th:block>
 </head>
 <body>
 <div class="uk-container">
     <h1 class="uk-heading-small">Wawa</h1>
     <div class="uk-margin uk-card uk-card-default uk-card-body">
         <div class="uk-margin">
-            <a class="uk-button uk-button-default" href="refresh">Refresh</a>
-        </div>
+            <form id="formsearch" class="uk-search uk-search-default" action="searchentry" method="get">
+              <span class="uk-search-icon-flip" uk-search-icon></span>
+              <input id="searchbar" name="word" class="uk-search-input" type="search" placeholder="Search" aria-label="Search">
+            </form>
+          </div>
         <div class="uk-margin">
-            <table>
-                <tr th:each="b:${blogs}">
-                    <td>
-                        <img width="50" height="70" th:src="@{${website+b.image}}" alt="Avatar">
-                    </td>
-                    <td>
-                        <a th:href="@{${website+b.url}}" th:text="${b.title}"></a>
-                    </td>
-                </tr>
+            <table id="entries">
             </table>
         </div>
 
     </div>
 </div>
+<script>
+
+    $(function(){
+        ajaxRefreshEntries();
+
+        $('#searchbar').keypress(function (e) {
+          if (e.which == 13) {
+            $('#formsearch').submit();
+            return false;    //<---- Add this line
+          }
+        });
+    });
+
+    function ajaxRefreshEntries(){
+        $.ajax({
+            url: 'ajaxhome',
+            method: 'get',
+            data: {
+                page: 0,
+                max: 50
+            },
+            success: function(response){
+                $("#entries").html(response);
+            }
+        });
+    }
+</script>
 </body>
 </html>

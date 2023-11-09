@@ -16,21 +16,26 @@ public class ScrapTask {
 
     @Scheduled(fixedRate = 3600000)
     public void execute(){
-        PageScrapper scrapper = new PageScrapper();
-        try {
-            System.out.println("Scrapping website "+Vars.WEBSITE+" ...");
-            ArrayList<Entry> entries = scrapper.scrapWebsite(50);
-            System.out.println("Scrapping finished");
-            for (Entry e : entries){
-                Entry dbEnt = DB.getInstance().getEntry(e.getId());
-                if (dbEnt == null){
-                    DB.getInstance().insertEntry(e);
-                    System.out.println("Inserted: "+e);
+        if (Vars.SCRAP_ENABLED){
+            PageScrapper scrapper = new PageScrapper();
+            try {
+                System.out.println("Scrapping website "+Vars.WEBSITE+" ...");
+                ArrayList<Entry> entries = scrapper.scrapWebsite(50);
+                System.out.println("Scrapping finished");
+                for (Entry e : entries){
+                    Entry dbEnt = DB.getInstance().getEntry(e.getId());
+                    if (dbEnt == null){
+                        DB.getInstance().insertEntry(e);
+                        System.out.println("Inserted: "+e);
+                    }
                 }
+            } catch (IOException | SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("Finished task");
+
+        }else{
+            System.out.println("Task disabled");
         }
-        System.out.println("Finished task");
     }
 }
