@@ -42,12 +42,13 @@ public class DB {
     }
 
     public void insertEntry(Entry ent) throws SQLException {
-        String sql = "insert into wawa_entry(entry_id,entry_title,entry_url,entry_img)values(?,?,?,?)";
+        String sql = "insert into wawa_entry(entry_id,entry_title,entry_url,entry_img,entry_category)values(?,?,?,?,?)";
         PreparedStatement stmt = getConnection().prepareStatement(sql);
         stmt.setInt(1,ent.getId());
         stmt.setString(2,ent.getTitle());
         stmt.setString(3,ent.getUrl());
         stmt.setString(4,ent.getImage());
+        stmt.setString(5,ent.getCategory());
         stmt.executeUpdate();
         stmt.close();
     }
@@ -59,11 +60,7 @@ public class DB {
         stmt.setInt(1,id);
         ResultSet res = stmt.executeQuery();
         if (res.next()){
-            ent = new Entry();
-            ent.setId(res.getInt("entry_id"));
-            ent.setTitle(res.getString("entry_title"));
-            ent.setUrl(res.getString("entry_url"));
-            ent.setImage(res.getString("entry_img"));
+            ent = createEntry(res);
         }
         res.close();
         stmt.close();
@@ -91,6 +88,7 @@ public class DB {
         ent.setTitle(res.getString("entry_title"));
         ent.setUrl(res.getString("entry_url"));
         ent.setImage(res.getString("entry_img"));
+        ent.setCategory(res.getString("entry_category"));
         return ent;
     }
 

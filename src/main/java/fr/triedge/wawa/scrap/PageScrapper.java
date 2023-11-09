@@ -41,9 +41,10 @@ public class PageScrapper {
             String idlink = "0";
             if (cat == Category.MANGA){
                 idlink = u.replace("?p=manga&id=","").split("-")[0];
+                ent.setCategory(Vars.CAT_ANIME);
             }else{
                 idlink = u.replace("?p=film&id=","").split("-")[0];
-
+                ent.setCategory(Vars.CAT_FILM);
             }
             ent.setId(Integer.parseInt(idlink));
 

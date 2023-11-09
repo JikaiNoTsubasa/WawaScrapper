@@ -42,7 +42,7 @@ public class HomeController {
         int currentPage = (page != null)?page:0;
         int perPage = (max != null)?max:Vars.PERPAGE;
 
-        Template tpl = new Template("/html/homeTable.html");
+        Template tpl = new Template("/html/homeTiles.html");
         StringBuilder tmp = new StringBuilder();
 
         try {

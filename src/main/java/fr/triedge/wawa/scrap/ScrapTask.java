@@ -20,7 +20,7 @@ public class ScrapTask {
             PageScrapper scrapper = new PageScrapper();
             try {
                 System.out.println("Scrapping website "+Vars.WEBSITE+" ...");
-                ArrayList<Entry> entries = scrapper.scrapWebsite(50);
+                ArrayList<Entry> entries = scrapper.scrapWebsite(Vars.SCRAP_ENTRIES_COUNT);
                 System.out.println("Scrapping finished");
                 for (Entry e : entries){
                     Entry dbEnt = DB.getInstance().getEntry(e.getId());

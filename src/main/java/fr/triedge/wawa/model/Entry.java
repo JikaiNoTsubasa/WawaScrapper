@@ -1,10 +1,13 @@
 package fr.triedge.wawa.model;
 
+import fr.triedge.wawa.utils.Vars;
+
 public class Entry {
     private int id;
     private String url;
     private String title;
     private String image;
+    private String category = Vars.CAT_FILM;
 
     public String getImage() {
         return image;
@@ -37,6 +40,14 @@ public class Entry {
         this.id = id;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Entry{" +
@@ -44,6 +55,7 @@ public class Entry {
                 ", url='" + url + '\'' +
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
+                ", category='" + category + '\'' +
                 '}';
     }
 }
